@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import '../theme/app_theme.dart';
 import '../widgets/fade_in_up.dart';
 import '../widgets/slide_route.dart';
 import '../services/auth_service.dart';
 import 'home_screen.dart';
-import 'register_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   final _authService = AuthService();
   bool _isLoading = false;
 
@@ -25,20 +25,28 @@ class _LoginScreenState extends State<LoginScreen> {
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _confirmPasswordController.dispose();
     super.dispose();
   }
 
-  Future<void> _login() async {
+  Future<void> _register() async {
     if (!_formKey.currentState!.validate()) return;
 
     setState(() => _isLoading = true);
 
     try {
-      await _authService.signInWithEmail(
+      await _authService.registerWithEmail(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+      await _authService.sendEmailVerification();
+
       if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text(
+                'Account created! Check your email to verify your account.')),
+      );
       Navigator.of(context).pushReplacement(slideRoute(const HomeScreen()));
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
@@ -47,30 +55,6 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } finally {
       if (mounted) setState(() => _isLoading = false);
-    }
-  }
-
-  Future<void> _forgotPassword() async {
-    final email = _emailController.text.trim();
-    if (email.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text(
-                'Enter your email above first, then tap "Forgot Password?"')),
-      );
-      return;
-    }
-    try {
-      await _authService.sendPasswordResetEmail(email);
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Password reset email sent to $email')),
-      );
-    } on FirebaseAuthException catch (e) {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(_authService.getErrorMessage(e))),
-      );
     }
   }
 
@@ -90,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const FadeInUp(
                   delay: Duration(milliseconds: 40),
                   child: Text(
-                    'Welcome  back',
+                    'Create  account',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 26,
@@ -126,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     decoration: const InputDecoration(hintText: 'Password'),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
+                        return 'Please enter a password';
                       }
                       if (value.length < 6) {
                         return 'Password must be at least 6 characters';
@@ -135,11 +119,27 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
                 ),
+                const SizedBox(height: 16),
+                FadeInUp(
+                  delay: const Duration(milliseconds: 200),
+                  child: TextFormField(
+                    controller: _confirmPasswordController,
+                    obscureText: true,
+                    decoration:
+                        const InputDecoration(hintText: 'Confirm password'),
+                    validator: (value) {
+                      if (value != _passwordController.text) {
+                        return 'Passwords do not match';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
                 const SizedBox(height: 24),
                 FadeInUp(
-                  delay: const Duration(milliseconds: 220),
+                  delay: const Duration(milliseconds: 240),
                   child: ElevatedButton(
-                    onPressed: _isLoading ? null : _login,
+                    onPressed: _isLoading ? null : _register,
                     child: _isLoading
                         ? const SizedBox(
                             height: 20,
@@ -147,35 +147,22 @@ class _LoginScreenState extends State<LoginScreen> {
                             child: CircularProgressIndicator(
                                 strokeWidth: 2, color: Colors.white),
                           )
-                        : const Text('Login'),
+                        : const Text('Create account'),
                   ),
                 ),
-                const SizedBox(height: 28),
+                const SizedBox(height: 24),
                 FadeInUp(
                   delay: const Duration(milliseconds: 280),
                   child: GestureDetector(
-                    onTap: _forgotPassword,
-                    child: const Text(
-                      'Forgot Password?',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: AppColors.textGrey, fontSize: 14),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                FadeInUp(
-                  delay: const Duration(milliseconds: 320),
-                  child: GestureDetector(
-                    onTap: () => Navigator.of(context)
-                        .push(slideRoute(const RegisterScreen())),
+                    onTap: () => Navigator.of(context).pop(),
                     child: const Text.rich(
                       TextSpan(
-                        text: "Don't have an account? ",
+                        text: 'Already have an account? ',
                         style:
                             TextStyle(color: AppColors.textBody, fontSize: 14),
                         children: [
                           TextSpan(
-                            text: 'Create account',
+                            text: 'Login',
                             style: TextStyle(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.w700),
