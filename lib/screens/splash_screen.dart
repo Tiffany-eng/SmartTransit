@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../widgets/slide_route.dart';
+import '../services/auth_service.dart';
 import 'login_screen.dart';
+import 'home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -10,10 +12,12 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
   bool _visible = false;
-  late final AnimationController _dotsController =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 1200))..repeat();
+  late final AnimationController _dotsController = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 1200))
+    ..repeat();
 
   @override
   void initState() {
@@ -22,7 +26,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       if (mounted) setState(() => _visible = true);
     });
     Future.delayed(const Duration(milliseconds: 2100), () {
-      if (mounted) {
+      if (!mounted) return;
+      // Check if Firebase already has a logged-in user saved on this device.
+      final user = AuthService().currentUser;
+      if (user != null) {
+        Navigator.of(context).pushReplacement(slideRoute(const HomeScreen()));
+      } else {
         Navigator.of(context).pushReplacement(slideRoute(const LoginScreen()));
       }
     });
@@ -46,7 +55,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
         width: 6,
         height: 6,
         margin: const EdgeInsets.symmetric(horizontal: 3),
-        decoration: BoxDecoration(color: Colors.white.withOpacity(0.8), shape: BoxShape.circle),
+        decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.8), shape: BoxShape.circle),
       ),
     );
   }
@@ -85,14 +95,17 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               curve: Curves.easeOut,
               child: Text(
                 'Your smart way to move',
-                style: TextStyle(color: Colors.white.withOpacity(0.85), fontSize: 14),
+                style: TextStyle(
+                    color: Colors.white.withOpacity(0.85), fontSize: 14),
               ),
             ),
             const SizedBox(height: 40),
             AnimatedOpacity(
               opacity: _visible ? 1 : 0,
               duration: const Duration(milliseconds: 700),
-              child: Row(mainAxisSize: MainAxisSize.min, children: List.generate(3, _dot)),
+              child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: List.generate(3, _dot)),
             ),
           ],
         ),

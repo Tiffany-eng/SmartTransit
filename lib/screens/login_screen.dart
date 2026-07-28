@@ -20,6 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   final _authService = AuthService();
   bool _isLoading = false;
+  bool _isGoogleLoading = false;
 
   @override
   void dispose() {
@@ -47,6 +48,29 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     } finally {
       if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  Future<void> _loginWithGoogle() async {
+    setState(() => _isGoogleLoading = true);
+    try {
+      final result = await _authService.signInWithGoogle();
+      if (result == null) return; // user cancelled the picker
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(slideRoute(const HomeScreen()));
+    } on FirebaseAuthException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(_authService.getErrorMessage(e))),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Google sign-in failed. Please try again.')),
+      );
+    } finally {
+      if (mounted) setState(() => _isGoogleLoading = false);
     }
   }
 
@@ -148,6 +172,21 @@ class _LoginScreenState extends State<LoginScreen> {
                                 strokeWidth: 2, color: Colors.white),
                           )
                         : const Text('Login'),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                FadeInUp(
+                  delay: const Duration(milliseconds: 250),
+                  child: OutlinedButton.icon(
+                    onPressed: _isGoogleLoading ? null : _loginWithGoogle,
+                    icon: _isGoogleLoading
+                        ? const SizedBox(
+                            height: 16,
+                            width: 16,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : const Icon(Icons.g_mobiledata, size: 24),
+                    label: const Text('Continue with Google'),
                   ),
                 ),
                 const SizedBox(height: 28),

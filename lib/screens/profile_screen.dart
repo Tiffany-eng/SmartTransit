@@ -4,6 +4,7 @@ import '../widgets/dev_jump_menu.dart';
 import '../widgets/fade_in_up.dart';
 import '../widgets/pill_back_button.dart';
 import '../widgets/slide_route.dart';
+import '../services/auth_service.dart';
 import 'data_settings_screen.dart';
 import 'login_screen.dart';
 import 'notifications_screen.dart';
@@ -13,7 +14,21 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final accountLinks = ['Personal Information', 'Payment Methods', 'Saved Stops', 'Support & Help'];
+    final accountLinks = [
+      'Personal Information',
+      'Payment Methods',
+      'Saved Stops',
+      'Support & Help'
+    ];
+
+    // Get the currently logged-in user from Firebase.
+    final user = AuthService().currentUser;
+    final email = user?.email ?? 'No email found';
+    // Use the part before "@" as a stand-in display name, since we don't
+    // store a separate name field yet.
+    final displayName = email.contains('@') ? email.split('@')[0] : email;
+    final avatarInitial =
+        displayName.isNotEmpty ? displayName[0].toUpperCase() : '?';
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -33,22 +48,36 @@ class ProfileScreen extends StatelessWidget {
                             tween: Tween(begin: 0.6, end: 1),
                             duration: const Duration(milliseconds: 450),
                             curve: Curves.elasticOut,
-                            builder: (context, scale, child) => Transform.scale(scale: scale, child: child),
+                            builder: (context, scale, child) =>
+                                Transform.scale(scale: scale, child: child),
                             child: Container(
                               width: 76,
                               height: 76,
                               alignment: Alignment.center,
-                              decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
-                              child: const Text('Keyla', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15)),
+                              decoration: const BoxDecoration(
+                                  color: AppColors.primary,
+                                  shape: BoxShape.circle),
+                              child: Text(avatarInitial,
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 15)),
                             ),
                           ),
                           const SizedBox(height: 12),
-                          const Text('Keyla Nyacyesa  Bineza',
-                              style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: AppColors.textDark)),
+                          Text(displayName,
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 16,
+                                  color: AppColors.textDark)),
                           const SizedBox(height: 2),
-                          const Text('k.nyacyesa@alustudent.com', style: TextStyle(color: AppColors.textGrey, fontSize: 13)),
+                          Text(email,
+                              style: const TextStyle(
+                                  color: AppColors.textGrey, fontSize: 13)),
                           const SizedBox(height: 2),
-                          const Text('Member Since: January 2026', style: TextStyle(color: AppColors.textGrey, fontSize: 11)),
+                          const Text('Member Since: January 2026',
+                              style: TextStyle(
+                                  color: AppColors.textGrey, fontSize: 11)),
                         ],
                       ),
                     ),
@@ -60,17 +89,28 @@ class ProfileScreen extends StatelessWidget {
                       child: Container(
                         width: double.infinity,
                         padding: const EdgeInsets.all(18),
-                        decoration: BoxDecoration(color: AppColors.chipBg, borderRadius: BorderRadius.circular(18)),
+                        decoration: BoxDecoration(
+                            color: AppColors.chipBg,
+                            borderRadius: BorderRadius.circular(18)),
                         child: Column(
                           children: [
-                            const Text('Transit Summary', style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.textDark, fontSize: 14)),
+                            const Text('Transit Summary',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    color: AppColors.textDark,
+                                    fontSize: 14)),
                             const SizedBox(height: 14),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: const [
-                                _SummaryStat(label: 'Trips Completed', value: '48'),
-                                _SummaryStat(label: 'Favorite Route', value: 'Route 103'),
-                                _SummaryStat(label: 'Monthly Savings', value: '12,500 RWF'),
+                                _SummaryStat(
+                                    label: 'Trips Completed', value: '48'),
+                                _SummaryStat(
+                                    label: 'Favorite Route',
+                                    value: 'Route 103'),
+                                _SummaryStat(
+                                    label: 'Monthly Savings',
+                                    value: '12,500 RWF'),
                               ],
                             ),
                           ],
@@ -86,7 +126,11 @@ class ProfileScreen extends StatelessWidget {
                         const FadeInUp(
                           delay: Duration(milliseconds: 120),
                           child: Text('Account',
-                              style: TextStyle(color: AppColors.textGrey, fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 0.4)),
+                              style: TextStyle(
+                                  color: AppColors.textGrey,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.4)),
                         ),
                         const SizedBox(height: 10),
                         ...List.generate(accountLinks.length, (i) {
@@ -94,7 +138,8 @@ class ProfileScreen extends StatelessWidget {
                             padding: const EdgeInsets.only(bottom: 10),
                             child: FadeInUp(
                               delay: Duration(milliseconds: 150 + i * 40),
-                              child: _ProfileRow(label: accountLinks[i], onTap: () {}),
+                              child: _ProfileRow(
+                                  label: accountLinks[i], onTap: () {}),
                             ),
                           );
                         }),
@@ -102,14 +147,19 @@ class ProfileScreen extends StatelessWidget {
                         const FadeInUp(
                           delay: Duration(milliseconds: 320),
                           child: Text('Preferences',
-                              style: TextStyle(color: AppColors.textGrey, fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 0.4)),
+                              style: TextStyle(
+                                  color: AppColors.textGrey,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.4)),
                         ),
                         const SizedBox(height: 10),
                         FadeInUp(
                           delay: const Duration(milliseconds: 350),
                           child: _ProfileRow(
                             label: 'Data & Offline SMS Settings',
-                            onTap: () => Navigator.of(context).push(slideRoute(const DataSettingsScreen())),
+                            onTap: () => Navigator.of(context)
+                                .push(slideRoute(const DataSettingsScreen())),
                           ),
                         ),
                         const SizedBox(height: 10),
@@ -117,13 +167,15 @@ class ProfileScreen extends StatelessWidget {
                           delay: const Duration(milliseconds: 390),
                           child: _ProfileRow(
                             label: 'Notifications',
-                            onTap: () => Navigator.of(context).push(slideRoute(const NotificationsScreen())),
+                            onTap: () => Navigator.of(context)
+                                .push(slideRoute(const NotificationsScreen())),
                           ),
                         ),
                         const SizedBox(height: 10),
                         FadeInUp(
                           delay: const Duration(milliseconds: 430),
-                          child: _ProfileRow(label: 'Language, Darkmode, etc', onTap: () {}),
+                          child: _ProfileRow(
+                              label: 'Language, Darkmode, etc', onTap: () {}),
                         ),
                         const SizedBox(height: 24),
                         FadeInUp(
@@ -131,9 +183,18 @@ class ProfileScreen extends StatelessWidget {
                           child: SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(backgroundColor: AppColors.errorBg, foregroundColor: AppColors.error, elevation: 0),
-                              onPressed: () {
-                                Navigator.of(context).pushAndRemoveUntil(slideRoute(const LoginScreen()), (route) => false);
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.errorBg,
+                                  foregroundColor: AppColors.error,
+                                  elevation: 0),
+                              onPressed: () async {
+                                // Actually sign the user out of Firebase first,
+                                // then send them back to the Login screen.
+                                await AuthService().signOut();
+                                if (!context.mounted) return;
+                                Navigator.of(context).pushAndRemoveUntil(
+                                    slideRoute(const LoginScreen()),
+                                    (route) => false);
                               },
                               child: const Text('Logout'),
                             ),
@@ -163,9 +224,14 @@ class _SummaryStat extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(label, style: const TextStyle(color: AppColors.textGrey, fontSize: 11)),
+        Text(label,
+            style: const TextStyle(color: AppColors.textGrey, fontSize: 11)),
         const SizedBox(height: 6),
-        Text(value, style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w800, fontSize: 14)),
+        Text(value,
+            style: const TextStyle(
+                color: AppColors.primary,
+                fontWeight: FontWeight.w800,
+                fontSize: 14)),
       ],
     );
   }
@@ -191,8 +257,13 @@ class _ProfileRow extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(label, style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.textDark, fontSize: 13.5)),
-            const Icon(Icons.chevron_right, size: 18, color: AppColors.textGrey),
+            Text(label,
+                style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textDark,
+                    fontSize: 13.5)),
+            const Icon(Icons.chevron_right,
+                size: 18, color: AppColors.textGrey),
           ],
         ),
       ),
