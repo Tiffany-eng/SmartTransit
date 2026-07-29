@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../core/theme/app_theme.dart';
+import '../cubit/settings/settings_cubit.dart';
+import '../cubit/settings/settings_state.dart';
 import '../widgets/dev_jump_menu.dart';
 import '../widgets/fade_in_up.dart';
 import '../widgets/pill_back_button.dart';
+import '../widgets/settings_toggle_row.dart';
 
 class _Notification {
   final String title;
@@ -44,6 +48,29 @@ class NotificationsScreen extends StatelessWidget {
                         const FadeInUp(
                           child: Text('Notifications',
                               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.textDark)),
+                        ),
+                        const SizedBox(height: 18),
+                        FadeInUp(
+                          delay: const Duration(milliseconds: 30),
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(color: AppColors.divider),
+                            ),
+                            child: BlocBuilder<SettingsCubit, SettingsState>(
+                              builder: (context, state) {
+                                return SettingsToggleRow(
+                                  label: 'Push Notifications',
+                                  value: state.settings.notificationsEnabled,
+                                  onChanged: (_) =>
+                                      context.read<SettingsCubit>().toggleNotifications(),
+                                );
+                              },
+                            ),
+                          ),
                         ),
                         const SizedBox(height: 18),
                         ...List.generate(_items.length, (i) {

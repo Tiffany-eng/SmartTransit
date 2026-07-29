@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
+import '../../core/theme/app_theme.dart';
 
 /// Top-right cluster on the Home screens: a gently-ringing notification
 /// bell, the "Kigali" location chip, and the user's initials avatar.

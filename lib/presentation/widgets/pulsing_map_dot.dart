@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
+import '../../core/theme/app_theme.dart';
 
 /// A "you are here" marker: a solid dot with two expanding, fading rings,
 /// looping continuously — used inside the placeholder map areas.

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../core/theme/app_theme.dart';
+import '../cubit/auth/auth_cubit.dart';
+import '../cubit/auth/auth_state.dart';
 import '../widgets/slide_route.dart';
-import '../services/auth_service.dart';
 import 'login_screen.dart';
 import 'home_screen.dart';
 
@@ -27,9 +29,8 @@ class _SplashScreenState extends State<SplashScreen>
     });
     Future.delayed(const Duration(milliseconds: 2100), () {
       if (!mounted) return;
-      // Check if Firebase already has a logged-in user saved on this device.
-      final user = AuthService().currentUser;
-      if (user != null) {
+      final authState = context.read<AuthCubit>().state;
+      if (authState is Authenticated) {
         Navigator.of(context).pushReplacement(slideRoute(const HomeScreen()));
       } else {
         Navigator.of(context).pushReplacement(slideRoute(const LoginScreen()));

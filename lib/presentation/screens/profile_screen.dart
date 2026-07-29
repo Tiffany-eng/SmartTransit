@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../core/theme/app_theme.dart';
+import '../cubit/auth/auth_cubit.dart';
+import '../cubit/auth/auth_state.dart';
+import '../cubit/settings/settings_cubit.dart';
+import '../cubit/settings/settings_state.dart';
 import '../widgets/dev_jump_menu.dart';
 import '../widgets/fade_in_up.dart';
 import '../widgets/pill_back_button.dart';
+import '../widgets/settings_toggle_row.dart';
 import '../widgets/slide_route.dart';
-import '../services/auth_service.dart';
 import 'data_settings_screen.dart';
 import 'login_screen.dart';
 import 'notifications_screen.dart';
@@ -21,9 +26,10 @@ class ProfileScreen extends StatelessWidget {
       'Support & Help'
     ];
 
-    // Get the currently logged-in user from Firebase.
-    final user = AuthService().currentUser;
-    final email = user?.email ?? 'No email found';
+    final authState = context.watch<AuthCubit>().state;
+    final email = authState is Authenticated
+        ? (authState.user.email ?? 'No email found')
+        : 'No email found';
     // Use the part before "@" as a stand-in display name, since we don't
     // store a separate name field yet.
     final displayName = email.contains('@') ? email.split('@')[0] : email;
@@ -174,8 +180,28 @@ class ProfileScreen extends StatelessWidget {
                         const SizedBox(height: 10),
                         FadeInUp(
                           delay: const Duration(milliseconds: 430),
-                          child: _ProfileRow(
-                              label: 'Language, Darkmode, etc', onTap: () {}),
+                          child: BlocBuilder<SettingsCubit, SettingsState>(
+                            builder: (context, settingsState) {
+                              return Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 15),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(14),
+                                  border: Border.all(color: AppColors.divider),
+                                ),
+                                child: SettingsToggleRow(
+                                  label: 'Dark Mode',
+                                  value: settingsState.settings.themeMode ==
+                                      ThemeMode.dark,
+                                  onChanged: (_) => context
+                                      .read<SettingsCubit>()
+                                      .toggleThemeMode(),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                         const SizedBox(height: 24),
                         FadeInUp(
@@ -190,7 +216,7 @@ class ProfileScreen extends StatelessWidget {
                               onPressed: () async {
                                 // Actually sign the user out of Firebase first,
                                 // then send them back to the Login screen.
-                                await AuthService().signOut();
+                                await context.read<AuthCubit>().signOut();
                                 if (!context.mounted) return;
                                 Navigator.of(context).pushAndRemoveUntil(
                                     slideRoute(const LoginScreen()),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
+import '../../core/theme/app_theme.dart';
 
 /// The rounded grey back pill seen at the top of every secondary screen.
 class PillBackButton extends StatefulWidget {
