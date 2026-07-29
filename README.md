@@ -28,19 +28,30 @@ Requires the Flutter SDK (stable channel) and a connected device or simulator.
 
 ## Project structure
 
+The app follows a Clean Architecture split (`presentation` / `domain` /
+`data` / `core`) with `flutter_bloc` Cubits for state management. See
+[ARCHITECTURE.md](ARCHITECTURE.md) for the full layout, the state-management
+rationale, and how the 3 persisted user preferences (dark mode, push
+notifications, SMS data fallback) work.
+
 ```
 lib/
-  main.dart                  # App entry point
-  theme/app_theme.dart       # Colors, type, component theming
-  widgets/                   # Shared building blocks
-    fade_in_up.dart          # Staggered entrance animation
-    slide_route.dart         # Slide+fade page transition
-    pill_back_button.dart    # Rounded back button
-    home_header_bar.dart     # Bell / Kigali chip / avatar
-    action_card.dart         # Find Route / Live Map / Nearby Stops cards
-    pulsing_map_dot.dart     # "You are here" animated map marker
-    dev_jump_menu.dart       # Demo-only: jump to any screen instantly
-  screens/                   # One file per screen, matching the naming above
+  main.dart                  # App entry point / composition root
+  core/theme/                # Colors, type, component theming (light + dark)
+  domain/                    # Entities + repository interfaces (pure Dart)
+  data/                      # Firebase + SharedPreferences implementations
+  presentation/
+    cubit/                   # AuthCubit, SettingsCubit
+    widgets/                 # Shared building blocks
+      fade_in_up.dart          # Staggered entrance animation
+      slide_route.dart         # Slide+fade page transition
+      pill_back_button.dart    # Rounded back button
+      home_header_bar.dart     # Bell / Kigali chip / avatar
+      action_card.dart         # Find Route / Live Map / Nearby Stops cards
+      pulsing_map_dot.dart     # "You are here" animated map marker
+      settings_toggle_row.dart # Reusable on/off switch row
+      dev_jump_menu.dart       # Demo-only: jump to any screen instantly
+    screens/                  # One file per screen, matching the naming above
 ```
 
 ## Notes
