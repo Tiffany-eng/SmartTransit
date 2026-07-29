@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../app_runtime.dart';
+import '../services/transit_repository.dart';
 import '../theme/app_theme.dart';
 import '../widgets/dev_jump_menu.dart';
 import '../widgets/fade_in_up.dart';
@@ -46,7 +48,17 @@ class _DataSettingsScreenState extends State<DataSettingsScreen> {
                               const Text('Enable Automatic SMS Fallback',
                                   style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.textDark, fontSize: 14)),
                               GestureDetector(
-                                onTap: () => setState(() => _enabled = !_enabled),
+                                onTap: () async {
+                                  final enabled = !_enabled;
+                                  setState(() => _enabled = enabled);
+                                  try {
+                                    if (AppRuntime.firebaseAvailable) {
+                                      await TransitRepository().setSmsFallback(enabled);
+                                    }
+                                  } catch (_) {
+                                    if (mounted) setState(() => _enabled = !enabled);
+                                  }
+                                },
                                 child: AnimatedContainer(
                                   duration: const Duration(milliseconds: 260),
                                   curve: Curves.easeOut,

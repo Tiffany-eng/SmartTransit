@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../app_runtime.dart';
+import '../services/transit_repository.dart';
 import '../theme/app_theme.dart';
 import '../widgets/dev_jump_menu.dart';
 import '../widgets/fade_in_up.dart';
@@ -69,7 +71,12 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
                         FadeInUp(
                           delay: const Duration(milliseconds: 160),
                           child: ElevatedButton(
-                            onPressed: () => setState(() => _searched = true),
+                            onPressed: () async {
+                              if (AppRuntime.firebaseAvailable) {
+                                await TransitRepository().createTripRequest(origin: 'Current Location', destination: 'Select destination', routeId: '45');
+                              }
+                              if (mounted) setState(() => _searched = true);
+                            },
                             child: const Text('Find Route'),
                           ),
                         ),

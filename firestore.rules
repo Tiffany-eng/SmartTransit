@@ -1,0 +1,43 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+    function isStaff() {
+      return signedIn() && (request.auth.token.admin == true || request.auth.token.dispatcher == true);
+    }
+
+    // Rider-owned records are deliberately nested under the UID. This makes
+    // ownership unambiguous and prevents cross-account reads and writes.
+    match /users/{uid} {
+      allow create: if isOwner(uid);
+      allow read, update, delete: if isOwner(uid);
+
+      match /savedStops/{stopId} {
+        allow read, create, update, delete: if isOwner(uid);
+      }
+      match /tripRequests/{requestId} {
+        allow read, create, update, delete: if isOwner(uid);
+      }
+      match /notifications/{notificationId} {
+        allow read, update, delete: if isOwner(uid);
+        // Notifications are created by trusted server/Admin SDK code only.
+        allow create: if false;
+      }
+    }
+
+    // Timetables and route geometry are published transit data.
+    match /routes/{routeId} {
+      allow read: if signedIn();
+      allow create, update, delete: if isStaff();
+    }
+
+    // Public, non-sensitive operational bus details. Location samples live in
+    // Realtime Database because their update frequency is much higher.
+    match /buses/{busId} {
+      allow read: if signedIn();
+      allow create, update, delete: if isStaff();
+    }
+  }
+}

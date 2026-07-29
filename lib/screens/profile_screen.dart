@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../app_runtime.dart';
+import '../services/auth_service.dart';
 import '../theme/app_theme.dart';
 import '../widgets/dev_jump_menu.dart';
 import '../widgets/fade_in_up.dart';
@@ -132,7 +134,11 @@ class ProfileScreen extends StatelessWidget {
                             width: double.infinity,
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(backgroundColor: AppColors.errorBg, foregroundColor: AppColors.error, elevation: 0),
-                              onPressed: () {
+                              onPressed: () async {
+                                if (AppRuntime.firebaseAvailable) {
+                                  await AuthService().signOut();
+                                }
+                                if (!context.mounted) return;
                                 Navigator.of(context).pushAndRemoveUntil(slideRoute(const LoginScreen()), (route) => false);
                               },
                               child: const Text('Logout'),

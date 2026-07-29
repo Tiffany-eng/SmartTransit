@@ -25,6 +25,30 @@ flutter run
 ```
 
 Requires the Flutter SDK (stable channel) and a connected device or simulator.
+The checked-in project runs as a fully navigable UI demo by default, so no
+Firebase credentials are required to launch it.
+
+## Firebase backend
+
+The app supports Firebase Authentication, Cloud Firestore, and Realtime
+Database. To enable those services, run `flutterfire configure`, add the
+generated configuration files to the platform projects, enable Email/Password
+sign-in, and deploy the checked-in rules/indexes with:
+
+```bash
+firebase deploy --only firestore:rules,firestore:indexes,database
+```
+
+Then launch with Firebase enabled:
+
+```bash
+flutter run --dart-define=ENABLE_FIREBASE=true
+```
+
+The full collection contract and access model are documented in
+[`docs/FIREBASE_DATA_MODEL.md`](docs/FIREBASE_DATA_MODEL.md). Rider data lives
+under `users/{uid}`, while routes/buses are staff-managed and high-frequency bus
+locations live in Realtime Database.
 
 ## Project structure
 
