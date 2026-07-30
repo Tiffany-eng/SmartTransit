@@ -80,7 +80,7 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                                   ),
                                   const SizedBox(height: 8),
                                   const Text(
-                                    'Arriving in 8 minute',
+                                    'Arriving in 8 minutes',
                                     style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700, fontSize: 14),
                                   ),
                                   const SizedBox(height: 18),
