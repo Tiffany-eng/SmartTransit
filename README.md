@@ -28,6 +28,20 @@ Requires the Flutter SDK (stable channel) and a connected device or simulator.
 The checked-in project runs as a fully navigable UI demo by default, so no
 Firebase credentials are required to launch it.
 
+## Maps and current location
+
+The Live Tracking screen uses Google Maps and the route search screen can use the
+device's current location. Create a Google Maps Platform key with the Maps SDK
+for Android and Maps SDK for iOS enabled, then restrict it to this app's Android
+package/SHA-1 and iOS bundle ID.
+
+- Android: add `MAPS_API_KEY=your_key` to `android/local.properties`.
+- iOS: set the `GOOGLE_MAPS_API_KEY` build setting in Xcode (or an untracked
+  `.xcconfig` included by the Runner target).
+
+The app requests location access only after the rider taps the **From: Current
+Location** field.
+
 ## Firebase backend
 
 The app supports Firebase Authentication, Cloud Firestore, and Realtime

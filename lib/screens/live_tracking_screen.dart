@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../theme/app_theme.dart';
 import '../widgets/dev_jump_menu.dart';
 import '../widgets/pill_back_button.dart';
@@ -14,7 +16,12 @@ class LiveTrackingScreen extends StatefulWidget {
 }
 
 class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
+  static const _kigaliCentre = LatLng(-1.9441, 30.0619);
   bool _sheetUp = false;
+
+  bool get _mapsSupported =>
+      !kIsWeb &&
+      (defaultTargetPlatform == TargetPlatform.android || defaultTargetPlatform == TargetPlatform.iOS);
 
   @override
   void initState() {
@@ -37,18 +44,37 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                 Expanded(
                   child: Stack(
                     children: [
-                      Container(
-                        width: double.infinity,
-                        color: AppColors.cardGrey,
-                        child: const Stack(
-                          children: [
-                            Center(
-                              child: Text('Map View', style: TextStyle(color: AppColors.textGrey, fontWeight: FontWeight.w600)),
+                      _mapsSupported
+                          ? GoogleMap(
+                              initialCameraPosition: const CameraPosition(target: _kigaliCentre, zoom: 13),
+                              markers: {
+                                const Marker(
+                                  markerId: MarkerId('rider'),
+                                  position: _kigaliCentre,
+                                  infoWindow: InfoWindow(title: 'Your location'),
+                                ),
+                                const Marker(
+                                  markerId: MarkerId('next-stop'),
+                                  position: LatLng(-1.9396, 30.0588),
+                                  infoWindow: InfoWindow(title: 'Nyabugogo Station'),
+                                ),
+                              },
+                              myLocationButtonEnabled: false,
+                              zoomControlsEnabled: false,
+                            )
+                          : Container(
+                              width: double.infinity,
+                              color: AppColors.cardGrey,
+                              child: const Stack(
+                                children: [
+                                  Center(
+                                    child: Text('Map is available on Android and iOS.',
+                                        style: TextStyle(color: AppColors.textGrey, fontWeight: FontWeight.w600)),
+                                  ),
+                                  PulsingMapDot(),
+                                ],
+                              ),
                             ),
-                            PulsingMapDot(),
-                          ],
-                        ),
-                      ),
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: AnimatedSlide(
