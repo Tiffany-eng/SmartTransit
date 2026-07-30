@@ -11,7 +11,8 @@ class AuthRepositoryImpl implements AuthRepository {
 
   AppUser? _toAppUser(fb.User? user) {
     if (user == null) return null;
-    return AppUser(uid: user.uid, email: user.email, emailVerified: user.emailVerified);
+    return AppUser(
+        uid: user.uid, email: user.email, emailVerified: user.emailVerified);
   }
 
   @override
@@ -25,12 +26,15 @@ class AuthRepositoryImpl implements AuthRepository {
   bool get isEmailVerified => _remoteDataSource.isEmailVerified;
 
   @override
-  Future<void> registerWithEmail({required String email, required String password}) {
-    return _remoteDataSource.registerWithEmail(email: email, password: password);
+  Future<void> registerWithEmail(
+      {required String email, required String password}) {
+    return _remoteDataSource.registerWithEmail(
+        email: email, password: password);
   }
 
   @override
-  Future<void> signInWithEmail({required String email, required String password}) {
+  Future<void> signInWithEmail(
+      {required String email, required String password}) {
     return _remoteDataSource.signInWithEmail(email: email, password: password);
   }
 
@@ -48,7 +52,8 @@ class AuthRepositoryImpl implements AuthRepository {
       _remoteDataSource.sendPasswordResetEmail(email);
 
   @override
-  Future<void> sendEmailVerification() => _remoteDataSource.sendEmailVerification();
+  Future<void> sendEmailVerification() =>
+      _remoteDataSource.sendEmailVerification();
 
   @override
   String getErrorMessage(Object error) {
