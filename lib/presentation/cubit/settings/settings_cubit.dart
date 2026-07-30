@@ -13,12 +13,14 @@ class SettingsCubit extends Cubit<SettingsState> {
 
   Future<void> _loadSettings() async {
     final settings = await _repository.loadSettings();
+    if (isClosed) return;
     emit(state.copyWith(settings: settings, isLoading: false));
   }
 
   Future<void> toggleThemeMode() async {
     final isDark = state.settings.themeMode != ThemeMode.dark;
     await _repository.setThemeMode(isDark);
+    if (isClosed) return;
     emit(state.copyWith(
       settings: state.settings.copyWith(
         themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
@@ -29,6 +31,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> toggleNotifications() async {
     final enabled = !state.settings.notificationsEnabled;
     await _repository.setNotificationsEnabled(enabled);
+    if (isClosed) return;
     emit(state.copyWith(
       settings: state.settings.copyWith(notificationsEnabled: enabled),
     ));
@@ -37,6 +40,7 @@ class SettingsCubit extends Cubit<SettingsState> {
   Future<void> toggleSmsFallback() async {
     final enabled = !state.settings.smsFallbackEnabled;
     await _repository.setSmsFallbackEnabled(enabled);
+    if (isClosed) return;
     emit(state.copyWith(
       settings: state.settings.copyWith(smsFallbackEnabled: enabled),
     ));

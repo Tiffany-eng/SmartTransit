@@ -196,12 +196,14 @@ class _StopRow extends StatefulWidget {
 
 class _StopRowState extends State<_StopRow> with SingleTickerProviderStateMixin {
   bool _grown = false;
-  late final AnimationController _pulseController =
-      AnimationController(vsync: this, duration: const Duration(milliseconds: 1800))..repeat();
+  AnimationController? _pulseController;
 
   @override
   void initState() {
     super.initState();
+    if (widget.isActive) {
+      _pulseController = AnimationController(vsync: this, duration: const Duration(milliseconds: 1800))..repeat();
+    }
     Future.delayed(widget.lineDelay, () {
       if (mounted) setState(() => _grown = true);
     });
@@ -209,7 +211,7 @@ class _StopRowState extends State<_StopRow> with SingleTickerProviderStateMixin 
 
   @override
   void dispose() {
-    _pulseController.dispose();
+    _pulseController?.dispose();
     super.dispose();
   }
 
@@ -223,9 +225,9 @@ class _StopRowState extends State<_StopRow> with SingleTickerProviderStateMixin 
             children: [
               widget.isActive
                   ? AnimatedBuilder(
-                      animation: _pulseController,
+                      animation: _pulseController!,
                       builder: (context, child) {
-                        final t = _pulseController.value;
+                        final t = _pulseController!.value;
                         return Container(
                           width: 12,
                           height: 12,
