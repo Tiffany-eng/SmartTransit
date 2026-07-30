@@ -8,22 +8,22 @@ import 'package:google_fonts/google_fonts.dart';
 class AppColors {
   AppColors._();
 
-  static const Color primary = Color(0xFF3366FF);
-  static const Color primaryDark = Color(0xFF2952CC);
-  static const Color chipBg = Color(0xFFEAF0FF);
+  static const Color primary = Color(0xFF3B6FF5);
+  static const Color primaryDark = Color(0xFF2C56C4);
+  static const Color chipBg = Color(0xFFEDF2FF);
 
-  static const Color bgLight = Color(0xFFF6F7FB);
-  static const Color cardGrey = Color(0xFFF2F3F7);
-  static const Color divider = Color(0xFFE8EAF0);
+  static const Color bgLight = Color(0xFFF7F8FC);
+  static const Color cardGrey = Color(0xFFF2F4F8);
+  static const Color divider = Color(0xFFE7EAF1);
 
-  static const Color textDark = Color(0xFF15181F);
+  static const Color textDark = Color(0xFF16181F);
   static const Color textBody = Color(0xFF4B5163);
-  static const Color textGrey = Color(0xFF9AA1B2);
+  static const Color textGrey = Color(0xFF98A0B2);
 
-  static const Color success = Color(0xFF22B573);
-  static const Color warning = Color(0xFFF5A623);
-  static const Color error = Color(0xFFEB4D4D);
-  static const Color errorBg = Color(0xFFFDECEC);
+  static const Color success = Color(0xFF1FAE74);
+  static const Color warning = Color(0xFFF2A93B);
+  static const Color error = Color(0xFFEA4C4C);
+  static const Color errorBg = Color(0xFFFCEDED);
 }
 
 class AppTheme {
