@@ -84,7 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     const FadeInUp(
                       delay: Duration(milliseconds: 40),
                       child: Text(
-                        'Welcome back',
+                        'Welcome  back',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 26,
