@@ -61,8 +61,7 @@ the app manually, use the small "apps" button in the top-right corner of
 every screen (see [Known limitations](#known-limitations) — it's a demo aid,
 not shipped functionality). Register isn't in that list since it's reached
 from Login's "Create account" link.
-=======
->>>>>>> parent of 839080c (Write a full README and fix remaining text bugs)
+
 
 ## Project structure
 
