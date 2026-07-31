@@ -71,7 +71,6 @@ class _LoginScreenState extends State<LoginScreen> {
       builder: (context, state) {
         final isLoading = state is AuthLoading;
         return Scaffold(
-          backgroundColor: Colors.white,
           body: SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -81,15 +80,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const SizedBox(height: 56),
-                    const FadeInUp(
-                      delay: Duration(milliseconds: 40),
+                    FadeInUp(
+                      delay: const Duration(milliseconds: 40),
                       child: Text(
                         'Welcome back',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.w800,
-                            color: AppColors.textDark),
+                            color: context.colors.textPrimary),
                       ),
                     ),
                     const SizedBox(height: 40),
@@ -164,10 +163,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       delay: const Duration(milliseconds: 280),
                       child: GestureDetector(
                         onTap: _forgotPassword,
-                        child: const Text(
+                        child: Text(
                           'Forgot Password?',
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: AppColors.textGrey, fontSize: 14),
+                          style: TextStyle(color: context.colors.textMuted, fontSize: 14),
                         ),
                       ),
                     ),
@@ -177,12 +176,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: GestureDetector(
                         onTap: () => Navigator.of(context)
                             .push(slideRoute(const RegisterScreen())),
-                        child: const Text.rich(
+                        child: Text.rich(
                           TextSpan(
                             text: "Don't have an account? ",
                             style:
-                                TextStyle(color: AppColors.textBody, fontSize: 14),
-                            children: [
+                                TextStyle(color: context.colors.textSecondary, fontSize: 14),
+                            children: const [
                               TextSpan(
                                 text: 'Create account',
                                 style: TextStyle(

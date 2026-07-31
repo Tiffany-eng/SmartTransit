@@ -16,7 +16,6 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [
@@ -32,15 +31,15 @@ class HomeScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const FadeInUp(
+                        FadeInUp(
                           child: Text(
                             'Good morning',
-                            style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: AppColors.textDark),
+                            style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: context.colors.textPrimary),
                           ),
                         ),
-                        const FadeInUp(
-                          delay: Duration(milliseconds: 40),
-                          child: Text('Keyla', style: TextStyle(color: AppColors.textGrey, fontSize: 14)),
+                        FadeInUp(
+                          delay: const Duration(milliseconds: 40),
+                          child: Text('Keyla', style: TextStyle(color: context.colors.textMuted, fontSize: 14)),
                         ),
                         const SizedBox(height: 20),
                         FadeInUp(
@@ -50,12 +49,12 @@ class HomeScreen extends StatelessWidget {
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                               decoration: BoxDecoration(
-                                color: AppColors.cardGrey,
+                                color: context.colors.surface,
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              child: const Text(
+                              child: Text(
                                 'Where are you going?',
-                                style: TextStyle(color: AppColors.textGrey, fontSize: 14),
+                                style: TextStyle(color: context.colors.textMuted, fontSize: 14),
                               ),
                             ),
                           ),

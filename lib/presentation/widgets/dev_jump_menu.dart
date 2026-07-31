@@ -49,12 +49,12 @@ class DevJumpMenuButton extends StatelessWidget {
             height: 34,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: context.colors.surface,
               shape: BoxShape.circle,
-              border: Border.all(color: AppColors.divider),
+              border: Border.all(color: context.colors.divider),
               boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 8)],
             ),
-            child: const Icon(Icons.apps_rounded, size: 18, color: AppColors.textGrey),
+            child: Icon(Icons.apps_rounded, size: 18, color: context.colors.textMuted),
           ),
         ),
       ),
@@ -64,7 +64,7 @@ class DevJumpMenuButton extends StatelessWidget {
   void _openMenu(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+      backgroundColor: context.colors.surface,
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(24))),
       builder: (sheetContext) {
         return Padding(
@@ -73,8 +73,8 @@ class DevJumpMenuButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('JUMP TO SCREEN',
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1.1, color: AppColors.textGrey)),
+              Text('JUMP TO SCREEN',
+                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800, letterSpacing: 1.1, color: context.colors.textMuted)),
               const SizedBox(height: 14),
               Wrap(
                 spacing: 8,
@@ -89,7 +89,7 @@ class DevJumpMenuButton extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                       decoration: BoxDecoration(
-                        color: active ? AppColors.primary : AppColors.cardGrey,
+                        color: active ? AppColors.primary : context.colors.chip,
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
@@ -97,7 +97,7 @@ class DevJumpMenuButton extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 12.5,
                           fontWeight: FontWeight.w700,
-                          color: active ? Colors.white : AppColors.textDark,
+                          color: active ? Colors.white : context.colors.textPrimary,
                         ),
                       ),
                     ),

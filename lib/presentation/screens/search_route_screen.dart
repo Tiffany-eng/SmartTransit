@@ -98,7 +98,7 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
     final destination = await showModalBottomSheet<String>(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Colors.white,
+      backgroundColor: context.colors.surface,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
@@ -138,16 +138,16 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Select your destination',
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w800,
-                        color: AppColors.textDark),
+                        color: context.colors.textPrimary),
                   ),
                   const SizedBox(height: 8),
-                  const Text('Search for a stop, neighbourhood, or landmark.',
-                      style: TextStyle(color: AppColors.textBody)),
+                  Text('Search for a stop, neighbourhood, or landmark.',
+                      style: TextStyle(color: context.colors.textSecondary)),
                   const SizedBox(height: 16),
                   TextField(
                     controller: searchController,
@@ -229,7 +229,6 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [
@@ -243,20 +242,20 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const FadeInUp(
+                        FadeInUp(
                           child: Text(
                             'Find your Route',
                             style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.w800,
-                                color: AppColors.textDark),
+                                color: context.colors.textPrimary),
                           ),
                         ),
                         const SizedBox(height: 24),
                         FadeInUp(
                           delay: const Duration(milliseconds: 60),
                           child: Material(
-                            color: AppColors.cardGrey,
+                            color: context.colors.surface,
                             borderRadius: BorderRadius.circular(12),
                             child: InkWell(
                               key: const Key('current-location-picker'),
@@ -275,9 +274,9 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
                                     Expanded(
                                       child: Text(
                                         'From: $_origin',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                             fontWeight: FontWeight.w600,
-                                            color: AppColors.textDark,
+                                            color: context.colors.textPrimary,
                                             fontSize: 14),
                                       ),
                                     ),
@@ -289,8 +288,8 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
                                             strokeWidth: 2),
                                       )
                                     else
-                                      const Icon(Icons.refresh,
-                                          color: AppColors.textGrey),
+                                      Icon(Icons.refresh,
+                                          color: context.colors.textMuted),
                                   ],
                                 ),
                               ),
@@ -304,7 +303,7 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
                             button: true,
                             label: 'Select destination',
                             child: Material(
-                              color: AppColors.cardGrey,
+                              color: context.colors.surface,
                               borderRadius: BorderRadius.circular(12),
                               child: InkWell(
                                 key: const Key('destination-picker'),
@@ -325,8 +324,8 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
                                               : 'To: $_destination',
                                           style: TextStyle(
                                             color: _destination == null
-                                                ? AppColors.textGrey
-                                                : AppColors.textDark,
+                                                ? context.colors.textMuted
+                                                : context.colors.textPrimary,
                                             fontSize: 14,
                                             fontWeight: _destination == null
                                                 ? FontWeight.normal
@@ -334,8 +333,8 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
                                           ),
                                         ),
                                       ),
-                                      const Icon(Icons.chevron_right,
-                                          color: AppColors.textGrey),
+                                      Icon(Icons.chevron_right,
+                                          color: context.colors.textMuted),
                                     ],
                                   ),
                                 ),
@@ -389,10 +388,10 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
                                     width: double.infinity,
                                     padding: const EdgeInsets.all(18),
                                     decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: context.colors.surface,
                                       borderRadius: BorderRadius.circular(18),
                                       border:
-                                          Border.all(color: AppColors.divider),
+                                          Border.all(color: context.colors.divider),
                                       boxShadow: [
                                         BoxShadow(
                                             color:
@@ -401,7 +400,7 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
                                             offset: const Offset(0, 6)),
                                       ],
                                     ),
-                                    child: const Column(
+                                    child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
@@ -409,15 +408,15 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
                                             style: TextStyle(
                                                 fontWeight: FontWeight.w800,
                                                 fontSize: 16,
-                                                color: AppColors.textDark)),
-                                        SizedBox(height: 6),
+                                                color: context.colors.textPrimary)),
+                                        const SizedBox(height: 6),
                                         Text('25 minutes',
                                             style: TextStyle(
-                                                color: AppColors.textGrey,
+                                                color: context.colors.textMuted,
                                                 fontSize: 13)),
                                         Text('12.5 KM',
                                             style: TextStyle(
-                                                color: AppColors.textGrey,
+                                                color: context.colors.textMuted,
                                                 fontSize: 13)),
                                       ],
                                     ),

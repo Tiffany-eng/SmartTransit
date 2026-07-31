@@ -22,8 +22,8 @@ class SettingsToggleRow extends StatelessWidget {
         Expanded(
           child: Text(
             label,
-            style: const TextStyle(
-                fontWeight: FontWeight.w700, color: AppColors.textDark, fontSize: 14),
+            style: TextStyle(
+                fontWeight: FontWeight.w700, color: context.colors.textPrimary, fontSize: 14),
           ),
         ),
         GestureDetector(
@@ -35,7 +35,7 @@ class SettingsToggleRow extends StatelessWidget {
             height: 28,
             padding: const EdgeInsets.all(3),
             decoration: BoxDecoration(
-              color: value ? AppColors.primary : AppColors.divider,
+              color: value ? AppColors.primary : context.colors.divider,
               borderRadius: BorderRadius.circular(20),
             ),
             child: AnimatedAlign(

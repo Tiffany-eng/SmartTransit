@@ -40,7 +40,6 @@ class _RouteErrorScreenState extends State<RouteErrorScreen> with SingleTickerPr
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [
@@ -54,9 +53,9 @@ class _RouteErrorScreenState extends State<RouteErrorScreen> with SingleTickerPr
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const FadeInUp(
+                        FadeInUp(
                           child: Text('Error State: Connection Lost',
-                              style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800, color: AppColors.textDark)),
+                              style: TextStyle(fontSize: 19, fontWeight: FontWeight.w800, color: context.colors.textPrimary)),
                         ),
                         const SizedBox(height: 44),
                         FadeInUp(

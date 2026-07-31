@@ -32,11 +32,11 @@ class _PillBackButtonState extends State<PillBackButton> {
             child: Container(
               width: 36,
               height: 36,
-              decoration: const BoxDecoration(
-                color: AppColors.cardGrey,
+              decoration: BoxDecoration(
+                color: context.colors.surface,
                 shape: BoxShape.circle,
               ),
-              child: const Icon(Icons.arrow_back, size: 18, color: AppColors.textDark),
+              child: Icon(Icons.arrow_back, size: 18, color: context.colors.textPrimary),
             ),
           ),
         ),
