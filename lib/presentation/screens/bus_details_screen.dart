@@ -36,7 +36,6 @@ class BusDetailsScreen extends StatelessWidget {
         final distanceLabel = distanceKm is num ? '$distanceKm km' : '1.8 km';
 
         return Scaffold(
-          backgroundColor: Colors.white,
           body: SafeArea(
             child: Stack(
               children: [
@@ -50,9 +49,9 @@ class BusDetailsScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const FadeInUp(
+                            FadeInUp(
                               child: Text('Bus Details',
-                                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.textDark)),
+                                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: context.colors.textPrimary)),
                             ),
                             const SizedBox(height: 18),
                             FadeInUp(
@@ -61,9 +60,9 @@ class BusDetailsScreen extends StatelessWidget {
                                 width: double.infinity,
                                 padding: const EdgeInsets.all(18),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: context.colors.surface,
                                   borderRadius: BorderRadius.circular(18),
-                                  border: Border.all(color: AppColors.divider),
+                                  border: Border.all(color: context.colors.divider),
                                   boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 12, offset: const Offset(0, 4))],
                                 ),
                                 child: Column(
@@ -87,7 +86,7 @@ class BusDetailsScreen extends StatelessWidget {
                               child: Container(
                                 width: double.infinity,
                                 padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(color: AppColors.chipBg, borderRadius: BorderRadius.circular(16)),
+                                decoration: BoxDecoration(color: context.colors.chip, borderRadius: BorderRadius.circular(16)),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
@@ -122,14 +121,14 @@ class BusDetailsScreen extends StatelessWidget {
                               child: Container(
                                 width: double.infinity,
                                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                                decoration: BoxDecoration(color: AppColors.cardGrey, borderRadius: BorderRadius.circular(12)),
+                                decoration: BoxDecoration(color: context.colors.surface, borderRadius: BorderRadius.circular(12)),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(fareLabel, style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.textDark, fontSize: 13)),
-                                    const Flexible(
+                                    Text(fareLabel, style: TextStyle(fontWeight: FontWeight.w700, color: context.colors.textPrimary, fontSize: 13)),
+                                    Flexible(
                                       child: Text('Payment: Mobile Money Accepted',
-                                          textAlign: TextAlign.right, style: TextStyle(color: AppColors.textGrey, fontSize: 12)),
+                                          textAlign: TextAlign.right, style: TextStyle(color: context.colors.textMuted, fontSize: 12)),
                                     ),
                                   ],
                                 ),
@@ -141,11 +140,11 @@ class BusDetailsScreen extends StatelessWidget {
                               child: Container(
                                 width: double.infinity,
                                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColors.divider)),
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), border: Border.all(color: context.colors.divider)),
                                 child: Text(
                                     'Driver: ${data?['driverName'] as String? ?? 'Jean Claude'}   '
                                     'Vehicle ID: ${data?['vehicleId'] as String? ?? 'KT-103'}',
-                                    style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.textDark, fontSize: 13)),
+                                    style: TextStyle(fontWeight: FontWeight.w600, color: context.colors.textPrimary, fontSize: 13)),
                               ),
                             ),
                             const SizedBox(height: 20),
@@ -176,16 +175,16 @@ class BusDetailsScreen extends StatelessWidget {
 class _Row extends StatelessWidget {
   final String label;
   final String value;
-  final Color valueColor;
-  const _Row({required this.label, required this.value, this.valueColor = AppColors.textDark});
+  final Color? valueColor;
+  const _Row({required this.label, required this.value, this.valueColor});
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(label, style: const TextStyle(color: AppColors.textGrey, fontSize: 13)),
-        Text(value, style: TextStyle(color: valueColor, fontWeight: FontWeight.w700, fontSize: 13)),
+        Text(label, style: TextStyle(color: context.colors.textMuted, fontSize: 13)),
+        Text(value, style: TextStyle(color: valueColor ?? context.colors.textPrimary, fontWeight: FontWeight.w700, fontSize: 13)),
       ],
     );
   }
@@ -194,16 +193,16 @@ class _Row extends StatelessWidget {
 class _Stat extends StatelessWidget {
   final String label;
   final String value;
-  final Color color;
-  const _Stat({required this.label, required this.value, this.color = AppColors.textDark});
+  final Color? color;
+  const _Stat({required this.label, required this.value, this.color});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(label, style: const TextStyle(color: AppColors.textGrey, fontSize: 11)),
+        Text(label, style: TextStyle(color: context.colors.textMuted, fontSize: 11)),
         const SizedBox(height: 4),
-        Text(value, style: TextStyle(color: color, fontWeight: FontWeight.w800, fontSize: 14)),
+        Text(value, style: TextStyle(color: color ?? context.colors.textPrimary, fontWeight: FontWeight.w800, fontSize: 14)),
       ],
     );
   }
@@ -271,14 +270,14 @@ class _StopRowState extends State<_StopRow> with SingleTickerProviderStateMixin 
                         );
                       },
                     )
-                  : Container(width: 12, height: 12, decoration: const BoxDecoration(color: AppColors.divider, shape: BoxShape.circle)),
+                  : Container(width: 12, height: 12, decoration: BoxDecoration(color: context.colors.divider, shape: BoxShape.circle)),
               if (!widget.isLast)
                 AnimatedContainer(
                   duration: const Duration(milliseconds: 420),
                   curve: Curves.easeOut,
                   width: 2,
                   height: _grown ? 34 : 0,
-                  color: AppColors.divider,
+                  color: context.colors.divider,
                 ),
             ],
           ),
@@ -290,7 +289,7 @@ class _StopRowState extends State<_StopRow> with SingleTickerProviderStateMixin 
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: widget.isActive ? FontWeight.w700 : FontWeight.w500,
-                color: widget.isActive ? AppColors.textDark : AppColors.textBody,
+                color: widget.isActive ? context.colors.textPrimary : context.colors.textSecondary,
               ),
             ),
           ),

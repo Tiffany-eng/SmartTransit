@@ -41,13 +41,13 @@ class _HomeHeaderBarState extends State<HomeHeaderBar> with SingleTickerProvider
             child: AnimatedBuilder(
               animation: _ring,
               builder: (context, child) => Transform.rotate(angle: _ring.value, child: child),
-              child: const Icon(Icons.notifications_none_rounded, size: 22, color: AppColors.textGrey),
+              child: Icon(Icons.notifications_none_rounded, size: 22, color: context.colors.textMuted),
             ),
           ),
           const SizedBox(width: 10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(color: AppColors.chipBg, borderRadius: BorderRadius.circular(20)),
+            decoration: BoxDecoration(color: context.colors.chip, borderRadius: BorderRadius.circular(20)),
             child: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -62,7 +62,7 @@ class _HomeHeaderBarState extends State<HomeHeaderBar> with SingleTickerProvider
             width: 28,
             height: 28,
             alignment: Alignment.center,
-            decoration: const BoxDecoration(color: AppColors.textDark, shape: BoxShape.circle),
+            decoration: const BoxDecoration(color: AppColors.primary, shape: BoxShape.circle),
             child: const Text('KN', style: TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w700)),
           ),
         ],
