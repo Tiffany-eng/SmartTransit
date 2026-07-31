@@ -152,6 +152,37 @@ Android. To point the app at your **own** Firebase project instead:
 flutter run
 ```
 
+Requires the Flutter SDK (stable channel) and a connected device or simulator.
+
+## Maps and current location
+
+The Live Tracking screen uses Google Maps and the route search screen can use the
+device's current location. Create a Google Maps Platform key with the Maps SDK
+for Android and Maps SDK for iOS enabled, then restrict it to this app's Android
+package/SHA-1 and iOS bundle ID.
+
+- Android: add `MAPS_API_KEY=your_key` to `android/local.properties`.
+- iOS: set the `GOOGLE_MAPS_API_KEY` build setting in Xcode (or an untracked
+  `.xcconfig` included by the Runner target).
+
+The app requests location access only after the rider taps the **From: Current
+Location** field.
+
+## Firebase backend
+
+The app supports Firebase Authentication, Cloud Firestore, and Realtime
+Database. To enable those services, run `flutterfire configure`, add the
+generated configuration files to the platform projects, enable Email/Password
+sign-in, and deploy the checked-in rules/indexes with:
+
+```bash
+firebase deploy --only firestore:rules,firestore:indexes,database
+```
+
+The full collection contract and access model are documented in
+[`docs/FIREBASE_DATA_MODEL.md`](docs/FIREBASE_DATA_MODEL.md). Rider data lives
+under `users/{uid}`, while routes/buses are staff-managed and high-frequency bus
+locations live in Realtime Database.
 To jump straight to any of the 12 main screens instead of navigating through
 the app manually, use the small "apps" button in the top-right corner of
 every screen (see [Known limitations](#known-limitations) — it's a demo aid,

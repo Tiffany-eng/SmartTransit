@@ -5,7 +5,8 @@ import 'package:smart_transit_kigali/main.dart';
 import 'fakes/fake_repositories.dart';
 
 void main() {
-  testWidgets('splash screen routes to login when signed out', (WidgetTester tester) async {
+  testWidgets('splash screen routes to login when signed out',
+      (WidgetTester tester) async {
     await tester.pumpWidget(SmartTransitApp(
       authRepository: FakeAuthRepository(),
       settingsRepository: FakeSettingsRepository(),
