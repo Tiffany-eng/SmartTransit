@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "291822792746",
+    "project_id": "smart-transit-kigali",
+    "storage_bucket": "smart-transit-kigali.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:291822792746:android:39c47157ca6dd9e53c9353",
+        "android_client_info": {
+          "package_name": "com.example.smart_transit_kigali"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSJDHUJhlsPqcsn0L9faKUXkMzhn2zK3E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

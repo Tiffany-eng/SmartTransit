@@ -1,4 +1,27 @@
 {
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "smart-transit-kigali",
+          "appId": "1:291822792746:android:39c47157ca6dd9e53c9353",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "smart-transit-kigali",
+          "configurations": {
+            "android": "1:291822792746:android:39c47157ca6dd9e53c9353",
+            "ios": "1:291822792746:ios:2d658c74a7be00d13c9353",
+            "macos": "1:291822792746:ios:2d658c74a7be00d13c9353",
+            "web": "1:291822792746:web:9651fc5990c3799c3c9353",
+            "windows": "1:291822792746:web:1a23de6bc1b760243c9353"
+          }
+        }
+      }
+    }
+  },
   "firestore": {
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"

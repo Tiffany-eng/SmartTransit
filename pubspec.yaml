@@ -20,6 +20,10 @@ dependencies:
   firebase_database: ^11.3.10
   geolocator: ^14.0.3
   google_maps_flutter: ^2.14.0
+  google_sign_in: ^6.2.1
+  flutter_bloc: ^9.1.1
+  equatable: ^2.1.0
+  shared_preferences: ^2.5.5
 
 dev_dependencies:
   flutter_test:
