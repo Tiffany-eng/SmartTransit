@@ -1,5 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// Firestore/Realtime Database document ID used by the search, live-tracking,
+/// and bus-details screens when no specific bus has been picked yet -- i.e.
+/// the only bus in this demo. See DEMO_SETUP.md for the seed data that
+/// backs it.
+const kDemoBusId = 'demo-route-45';
+
 class SavedStop {
   const SavedStop({required this.id, required this.name, required this.latitude, required this.longitude, this.note});
   final String id;

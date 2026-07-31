@@ -1,148 +1,174 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
+import '../../models/transit_models.dart';
+import '../../services/transit_repository.dart';
 import '../widgets/dev_jump_menu.dart';
 import '../widgets/fade_in_up.dart';
 import '../widgets/pill_back_button.dart';
 import '../widgets/slide_route.dart';
 import 'live_tracking_screen.dart';
 
-class BusDetailsScreen extends StatelessWidget {
-  const BusDetailsScreen({super.key});
+const _defaultStops = ['Downtown Terminal', 'Nyabugogo', 'Remera', 'Kimironko'];
 
-  static const _stops = ['Downtown Terminal', 'Nyabugogo', 'Remera', 'Kimironko'];
+class BusDetailsScreen extends StatelessWidget {
+  final String busId;
+  const BusDetailsScreen({super.key, this.busId = kDemoBusId});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  PillBackButton(onTap: () => Navigator.of(context).pop()),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const FadeInUp(
-                          child: Text('Bus Details',
-                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.textDark)),
-                        ),
-                        const SizedBox(height: 18),
-                        FadeInUp(
-                          delay: const Duration(milliseconds: 60),
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(18),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(18),
-                              border: Border.all(color: AppColors.divider),
-                              boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 12, offset: const Offset(0, 4))],
+    return StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+      stream: TransitRepository().watchBus(busId),
+      builder: (context, snapshot) {
+        final data = snapshot.data?.data();
+        final stops = (data?['stops'] as List?)?.cast<String>() ?? _defaultStops;
+        final activeStopIndex = (data?['activeStopIndex'] as num?)?.toInt() ?? 0;
+        final occupied = data?['occupied'];
+        final capacity = data?['capacity'];
+        final capacityLabel = (occupied is num && capacity is num)
+            ? '$occupied / $capacity Seats Occupied'
+            : '35 / 50 Seats Occupied';
+        final fareRwf = data?['fareRwf'];
+        final fareLabel = fareRwf is num ? 'Fare: $fareRwf RWF' : 'Fare: 500 RWF';
+        final etaMinutes = data?['etaMinutes'];
+        final etaLabel = etaMinutes is num ? '$etaMinutes minutes' : '4 minutes';
+        final distanceKm = data?['distanceKm'];
+        final distanceLabel = distanceKm is num ? '$distanceKm km' : '1.8 km';
+
+        return Scaffold(
+          backgroundColor: Colors.white,
+          body: SafeArea(
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      PillBackButton(onTap: () => Navigator.of(context).pop()),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const FadeInUp(
+                              child: Text('Bus Details',
+                                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.textDark)),
                             ),
-                            child: Column(
-                              children: const [
-                                _Row(label: 'Bus Number', value: '103'),
-                                SizedBox(height: 10),
-                                _Row(label: 'Route', value: 'Downtown Terminal → Kimironko'),
-                                SizedBox(height: 10),
-                                _Row(label: 'Route', value: 'City Transit'),
-                                SizedBox(height: 10),
-                                _Row(label: 'Status', value: 'On Time', valueColor: AppColors.success),
-                                SizedBox(height: 10),
-                                _Row(label: 'Capacity', value: '35 / 50 Seats Occupied'),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 14),
-                        FadeInUp(
-                          delay: const Duration(milliseconds: 110),
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(color: AppColors.chipBg, borderRadius: BorderRadius.circular(16)),
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                _Stat(label: 'Next Stop', value: 'Remera'),
-                                _Stat(label: 'Arrival', value: '4 minutes', color: AppColors.primary),
-                                _Stat(label: 'Distance', value: '1.8 km'),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        FadeInUp(
-                          delay: const Duration(milliseconds: 160),
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 4),
-                            child: Column(
-                              children: List.generate(_stops.length, (i) {
-                                final isActive = i == 0;
-                                final isLast = i == _stops.length - 1;
-                                return _StopRow(
-                                  label: _stops[i],
-                                  isActive: isActive,
-                                  isLast: isLast,
-                                  lineDelay: Duration(milliseconds: 200 + i * 140),
-                                );
-                              }),
-                            ),
-                          ),
-                        ),
-                        FadeInUp(
-                          delay: const Duration(milliseconds: 220),
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                            decoration: BoxDecoration(color: AppColors.cardGrey, borderRadius: BorderRadius.circular(12)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
-                                Text('Fare: 500 RWF', style: TextStyle(fontWeight: FontWeight.w700, color: AppColors.textDark, fontSize: 13)),
-                                Flexible(
-                                  child: Text('Payment: Mobile Money Accepted',
-                                      textAlign: TextAlign.right, style: TextStyle(color: AppColors.textGrey, fontSize: 12)),
+                            const SizedBox(height: 18),
+                            FadeInUp(
+                              delay: const Duration(milliseconds: 60),
+                              child: Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(18),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(18),
+                                  border: Border.all(color: AppColors.divider),
+                                  boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 12, offset: const Offset(0, 4))],
                                 ),
-                              ],
+                                child: Column(
+                                  children: [
+                                    _Row(label: 'Bus Number', value: data?['busNumber'] as String? ?? '103'),
+                                    const SizedBox(height: 10),
+                                    _Row(label: 'Route', value: data?['routeLabel'] as String? ?? 'Downtown Terminal → Kimironko'),
+                                    const SizedBox(height: 10),
+                                    _Row(label: 'Operator', value: data?['operator'] as String? ?? 'City Transit'),
+                                    const SizedBox(height: 10),
+                                    _Row(label: 'Status', value: data?['status'] as String? ?? 'On Time', valueColor: AppColors.success),
+                                    const SizedBox(height: 10),
+                                    _Row(label: 'Capacity', value: capacityLabel),
+                                  ],
+                                ),
+                              ),
                             ),
-                          ),
+                            const SizedBox(height: 14),
+                            FadeInUp(
+                              delay: const Duration(milliseconds: 110),
+                              child: Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(color: AppColors.chipBg, borderRadius: BorderRadius.circular(16)),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    _Stat(label: 'Next Stop', value: data?['nextStop'] as String? ?? 'Remera'),
+                                    _Stat(label: 'Arrival', value: etaLabel, color: AppColors.primary),
+                                    _Stat(label: 'Distance', value: distanceLabel),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            FadeInUp(
+                              delay: const Duration(milliseconds: 160),
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 4),
+                                child: Column(
+                                  children: List.generate(stops.length, (i) {
+                                    final isActive = i == activeStopIndex;
+                                    final isLast = i == stops.length - 1;
+                                    return _StopRow(
+                                      label: stops[i],
+                                      isActive: isActive,
+                                      isLast: isLast,
+                                      lineDelay: Duration(milliseconds: 200 + i * 140),
+                                    );
+                                  }),
+                                ),
+                              ),
+                            ),
+                            FadeInUp(
+                              delay: const Duration(milliseconds: 220),
+                              child: Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                                decoration: BoxDecoration(color: AppColors.cardGrey, borderRadius: BorderRadius.circular(12)),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(fareLabel, style: const TextStyle(fontWeight: FontWeight.w700, color: AppColors.textDark, fontSize: 13)),
+                                    const Flexible(
+                                      child: Text('Payment: Mobile Money Accepted',
+                                          textAlign: TextAlign.right, style: TextStyle(color: AppColors.textGrey, fontSize: 12)),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            FadeInUp(
+                              delay: const Duration(milliseconds: 260),
+                              child: Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                                decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColors.divider)),
+                                child: Text(
+                                    'Driver: ${data?['driverName'] as String? ?? 'Jean Claude'}   '
+                                    'Vehicle ID: ${data?['vehicleId'] as String? ?? 'KT-103'}',
+                                    style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.textDark, fontSize: 13)),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            FadeInUp(
+                              delay: const Duration(milliseconds: 300),
+                              child: ElevatedButton(
+                                onPressed: () => Navigator.of(context).push(slideRoute(LiveTrackingScreen(busId: busId))),
+                                child: const Text('View Live Tracking'),
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                          ],
                         ),
-                        const SizedBox(height: 12),
-                        FadeInUp(
-                          delay: const Duration(milliseconds: 260),
-                          child: Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                            decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), border: Border.all(color: AppColors.divider)),
-                            child: const Text('Driver: Jean Claude   Vehicle ID: KT-103',
-                                style: TextStyle(fontWeight: FontWeight.w600, color: AppColors.textDark, fontSize: 13)),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        FadeInUp(
-                          delay: const Duration(milliseconds: 300),
-                          child: ElevatedButton(
-                            onPressed: () => Navigator.of(context).push(slideRoute(const LiveTrackingScreen())),
-                            child: const Text('View Live Tracking'),
-                          ),
-                        ),
-                        const SizedBox(height: 24),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                const DevJumpMenuButton(current: 'Bus Details'),
+              ],
             ),
-            const DevJumpMenuButton(current: 'Bus Details'),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

@@ -88,7 +88,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (value == null || value.trim().isEmpty) {
                             return 'Please enter your email';
                           }
-                          if (!RegExp(r'^[\w.\-]+@([\w-]+\.)+[\w-]{2,4}$')
+                          if (!RegExp(r'^[\w.\-]+@([\w-]+\.)+[\w-]{2,}$')
                               .hasMatch(value.trim())) {
                             return 'Please enter a valid email';
                           }
@@ -104,10 +104,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         obscureText: true,
                         decoration: const InputDecoration(hintText: 'Password'),
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
+                          if (value == null || value.trim().isEmpty) {
                             return 'Please enter a password';
                           }
-                          if (value.length < 6) {
+                          if (value.trim().length < 6) {
                             return 'Password must be at least 6 characters';
                           }
                           return null;
@@ -123,7 +123,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         decoration:
                             const InputDecoration(hintText: 'Confirm password'),
                         validator: (value) {
-                          if (value != _passwordController.text) {
+                          if (value?.trim() != _passwordController.text.trim()) {
                             return 'Passwords do not match';
                           }
                           return null;
