@@ -165,6 +165,16 @@ package/SHA-1 and iOS bundle ID.
 - iOS: set the `GOOGLE_MAPS_API_KEY` build setting in Xcode (or an untracked
   `.xcconfig` included by the Runner target).
 
+For the RapidAPI Street View fallback used on web and desktop, pass the key at
+build time rather than adding it to a tracked file:
+
+```bash
+flutter run --dart-define=RAPIDAPI_KEY=your_rapidapi_key
+```
+
+The RapidAPI endpoint returns a static Street View image; it does not replace
+the Google Maps Platform key required by `google_maps_flutter` on Android/iOS.
+
 The app requests location access only after the rider taps the **From: Current
 Location** field.
 

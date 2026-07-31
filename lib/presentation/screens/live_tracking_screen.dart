@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../../core/config/map_api_config.dart';
 import '../../core/theme/app_theme.dart';
 import '../widgets/dev_jump_menu.dart';
 import '../widgets/pill_back_button.dart';
@@ -66,22 +67,7 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                               myLocationButtonEnabled: false,
                               zoomControlsEnabled: false,
                             )
-                          : Container(
-                              width: double.infinity,
-                              color: AppColors.cardGrey,
-                              child: const Stack(
-                                children: [
-                                  Center(
-                                    child: Text(
-                                        'Map is available on Android and iOS.',
-                                        style: TextStyle(
-                                            color: AppColors.textGrey,
-                                            fontWeight: FontWeight.w600)),
-                                  ),
-                                  PulsingMapDot(),
-                                ],
-                              ),
-                            ),
+                          : const _RapidApiStreetView(),
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: AnimatedSlide(
@@ -161,6 +147,67 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _RapidApiStreetView extends StatelessWidget {
+  const _RapidApiStreetView();
+
+  static const _streetViewUrl =
+      'https://google-map-places.p.rapidapi.com/maps/api/streetview?'
+      'size=600x400&source=default&return_error_code=true&location=Kigali%2C%20Rwanda';
+
+  @override
+  Widget build(BuildContext context) {
+    if (!MapApiConfig.hasRapidApiKey) {
+      return Container(
+        width: double.infinity,
+        color: AppColors.cardGrey,
+        child: const Stack(
+          children: [
+            Center(
+              child: Text(
+                'Map is available on Android and iOS.\n'
+                'Add RAPIDAPI_KEY to show Street View here.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: AppColors.textGrey,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            PulsingMapDot(),
+          ],
+        ),
+      );
+    }
+
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Image.network(
+          _streetViewUrl,
+          fit: BoxFit.cover,
+          headers: const {
+            'Content-Type': 'application/json',
+            'x-rapidapi-host': MapApiConfig.rapidApiHost,
+            'x-rapidapi-key': MapApiConfig.rapidApiKey,
+          },
+          errorBuilder: (context, error, stackTrace) => Container(
+            color: AppColors.cardGrey,
+            alignment: Alignment.center,
+            child: const Text(
+              'Street View is currently unavailable.',
+              style: TextStyle(
+                color: AppColors.textGrey,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+        const PulsingMapDot(),
+      ],
     );
   }
 }
