@@ -74,7 +74,7 @@ class _RouteErrorScreenState extends State<RouteErrorScreen> with SingleTickerPr
                                   SizedBox(height: 12),
                                   Text(
                                     'Unable to retrieve real-time transit databases due to network '
-                                    'connection interuption.',
+                                    'connection interruption.',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(color: AppColors.error, fontWeight: FontWeight.w700, fontSize: 14, height: 1.4),
                                   ),

@@ -19,6 +19,6 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('SMART TRANSIT'), findsNothing);
-    expect(find.text('Welcome  back'), findsOneWidget);
+    expect(find.text('Welcome back'), findsOneWidget);
   });
 }

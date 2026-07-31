@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import '../../core/theme/app_theme.dart';
+import '../../models/transit_models.dart';
+import '../../services/places_autocomplete_service.dart';
 import '../../services/transit_repository.dart';
 import '../widgets/dev_jump_menu.dart';
 import '../widgets/fade_in_up.dart';
@@ -27,6 +31,8 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
     'Nyamirambo',
     'University of Rwanda – Huye Campus',
   ];
+
+  final _placesService = PlacesAutocompleteService();
 
   bool _searched = false;
   bool _gettingCurrentLocation = false;
@@ -84,6 +90,10 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
   Future<void> _pickDestination() async {
     final searchController = TextEditingController();
     String query = '';
+    List<PlaceSuggestion> liveSuggestions = [];
+    bool isSearching = false;
+    bool sheetClosed = false;
+    Timer? debounce;
 
     final destination = await showModalBottomSheet<String>(
       context: context,
@@ -94,10 +104,31 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
       ),
       builder: (sheetContext) => StatefulBuilder(
         builder: (context, setModalState) {
-          final matches = _destinations
+          final localMatches = _destinations
               .where((destination) =>
                   destination.toLowerCase().contains(query.toLowerCase()))
               .toList();
+
+          void onQueryChanged(String value) {
+            query = value.trim();
+            debounce?.cancel();
+            if (query.isEmpty) {
+              setModalState(() {
+                liveSuggestions = [];
+                isSearching = false;
+              });
+              return;
+            }
+            setModalState(() => isSearching = true);
+            debounce = Timer(const Duration(milliseconds: 400), () async {
+              final results = await _placesService.search(query);
+              if (sheetClosed) return;
+              setModalState(() {
+                liveSuggestions = results;
+                isSearching = false;
+              });
+            });
+          }
 
           return SafeArea(
             child: Padding(
@@ -121,11 +152,20 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
                   TextField(
                     controller: searchController,
                     autofocus: true,
-                    onChanged: (value) =>
-                        setModalState(() => query = value.trim()),
-                    decoration: const InputDecoration(
+                    onChanged: onQueryChanged,
+                    decoration: InputDecoration(
                       hintText: 'Search destinations',
-                      prefixIcon: Icon(Icons.search),
+                      prefixIcon: const Icon(Icons.search),
+                      suffixIcon: isSearching
+                          ? const Padding(
+                              padding: EdgeInsets.all(14),
+                              child: SizedBox(
+                                height: 16,
+                                width: 16,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              ),
+                            )
+                          : null,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -133,26 +173,37 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
                     child: ListView(
                       shrinkWrap: true,
                       children: [
-                        for (final destination in matches)
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: const Icon(Icons.location_on_outlined,
-                                color: AppColors.primary),
-                            title: Text(destination),
-                            onTap: () =>
-                                Navigator.of(sheetContext).pop(destination),
-                          ),
-                        if (query.isNotEmpty &&
-                            !matches.any((destination) =>
-                                destination.toLowerCase() ==
-                                query.toLowerCase()))
-                          ListTile(
-                            contentPadding: EdgeInsets.zero,
-                            leading: const Icon(Icons.add_location_alt_outlined,
-                                color: AppColors.primary),
-                            title: Text('Use "$query"'),
-                            onTap: () => Navigator.of(sheetContext).pop(query),
-                          ),
+                        if (query.isEmpty)
+                          for (final destination in localMatches)
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: const Icon(Icons.location_on_outlined,
+                                  color: AppColors.primary),
+                              title: Text(destination),
+                              onTap: () =>
+                                  Navigator.of(sheetContext).pop(destination),
+                            )
+                        else ...[
+                          for (final suggestion in liveSuggestions)
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: const Icon(Icons.location_on_outlined,
+                                  color: AppColors.primary),
+                              title: Text(suggestion.text),
+                              onTap: () => Navigator.of(sheetContext)
+                                  .pop(suggestion.text),
+                            ),
+                          if (!liveSuggestions.any((s) =>
+                              s.text.toLowerCase() == query.toLowerCase()))
+                            ListTile(
+                              contentPadding: EdgeInsets.zero,
+                              leading: const Icon(Icons.add_location_alt_outlined,
+                                  color: AppColors.primary),
+                              title: Text('Use "$query"'),
+                              onTap: () =>
+                                  Navigator.of(sheetContext).pop(query),
+                            ),
+                        ],
                       ],
                     ),
                   ),
@@ -163,6 +214,8 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
         },
       ),
     );
+    sheetClosed = true;
+    debounce?.cancel();
     searchController.dispose();
 
     if (destination != null && mounted) {
@@ -302,7 +355,7 @@ class _SearchRouteScreenState extends State<SearchRouteScreen> {
                                           .createTripRequest(
                                         origin: _origin,
                                         destination: _destination!,
-                                        routeId: '45',
+                                        routeId: kDemoBusId,
                                       );
                                     } catch (_) {
                                       // Route discovery remains available if optional

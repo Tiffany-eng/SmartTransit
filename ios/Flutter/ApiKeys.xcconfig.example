@@ -1,0 +1,15 @@
+// Copy this file to ApiKeys.xcconfig (same folder) and fill in real values.
+// ApiKeys.xcconfig is gitignored on purpose -- never commit real API keys.
+//
+// GOOGLE_MAPS_API_KEY: Google Cloud Console -> APIs & Services -> Credentials.
+//   Must have the "Maps SDK for iOS" API enabled for this key.
+// GOOGLE_REVERSED_CLIENT_ID: open ios/Runner/GoogleService-Info.plist (download
+//   it from Firebase Console -> Project settings -> your iOS app) and copy the
+//   value of the REVERSED_CLIENT_ID key.
+//
+// Without a real GOOGLE_MAPS_API_KEY, GoogleMap widgets will not render --
+// this is a hard requirement of Google's SDK, not a bug in this app.
+// Without GOOGLE_REVERSED_CLIENT_ID, Google Sign-In will fail on iOS.
+
+GOOGLE_MAPS_API_KEY =
+GOOGLE_REVERSED_CLIENT_ID =
