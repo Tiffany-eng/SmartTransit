@@ -50,7 +50,7 @@ class BusDetailsScreen extends StatelessWidget {
                                 SizedBox(height: 10),
                                 _Row(label: 'Route', value: 'Downtown Terminal → Kimironko'),
                                 SizedBox(height: 10),
-                                _Row(label: 'Operator', value: 'City Transit'),
+                                _Row(label: 'Route', value: 'City Transit'),
                                 SizedBox(height: 10),
                                 _Row(label: 'Status', value: 'On Time', valueColor: AppColors.success),
                                 SizedBox(height: 10),

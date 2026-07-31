@@ -88,7 +88,7 @@ class _TrackingSmsScreenState extends State<TrackingSmsScreen> with SingleTicker
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: const [
-                                  Text('Route 213F (Kimironko → Nyabugogo)',
+                                  Text('Route 213F (Kimironko → Nyabugogo',
                                       style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.textDark, fontSize: 13.5)),
                                   SizedBox(height: 8),
                                   Text(
