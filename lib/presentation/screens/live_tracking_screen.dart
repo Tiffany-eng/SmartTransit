@@ -96,7 +96,6 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
     final etaLabel = etaMinutes is num ? '$etaMinutes minutes' : 'about 8 minutes';
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [
@@ -136,10 +135,10 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                             child: Container(
                               width: double.infinity,
                               padding: const EdgeInsets.fromLTRB(24, 24, 24, 32),
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
-                                boxShadow: [
+                              decoration: BoxDecoration(
+                                color: context.colors.surface,
+                                borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+                                boxShadow: const [
                                   BoxShadow(color: Colors.black12, blurRadius: 24, offset: Offset(0, -8)),
                                 ],
                               ),
@@ -147,11 +146,11 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  const Text('Next Stop', style: TextStyle(color: AppColors.textGrey, fontSize: 12, fontWeight: FontWeight.w600)),
+                                  Text('Next Stop', style: TextStyle(color: context.colors.textMuted, fontSize: 12, fontWeight: FontWeight.w600)),
                                   const SizedBox(height: 6),
                                   Text(
                                     nextStop,
-                                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: AppColors.textDark),
+                                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: context.colors.textPrimary),
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
@@ -163,7 +162,7 @@ class _LiveTrackingScreenState extends State<LiveTrackingScreen> {
                                     width: double.infinity,
                                     child: ElevatedButton(
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: AppColors.chipBg,
+                                        backgroundColor: context.colors.chip,
                                         foregroundColor: AppColors.primary,
                                         elevation: 0,
                                       ),

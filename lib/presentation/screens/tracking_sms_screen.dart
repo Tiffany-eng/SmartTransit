@@ -27,7 +27,6 @@ class _TrackingSmsScreenState extends State<TrackingSmsScreen> with SingleTicker
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [
@@ -45,24 +44,24 @@ class _TrackingSmsScreenState extends State<TrackingSmsScreen> with SingleTicker
                           child: Container(
                             width: double.infinity,
                             padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(color: AppColors.cardGrey, borderRadius: BorderRadius.circular(16)),
+                            decoration: BoxDecoration(color: context.colors.surface, borderRadius: BorderRadius.circular(16)),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Icon(Icons.wifi_off_rounded, size: 16, color: AppColors.textGrey),
+                                Icon(Icons.wifi_off_rounded, size: 16, color: context.colors.textMuted),
                                 const SizedBox(width: 8),
                                 Expanded(
                                   child: RichText(
                                     text: TextSpan(
-                                      style: const TextStyle(color: AppColors.textGrey, fontSize: 12, height: 1.5),
+                                      style: TextStyle(color: context.colors.textMuted, fontSize: 12, height: 1.5),
                                       children: [
                                         const TextSpan(
                                             text: 'Last known GPS location queried via automated SMS background text sync '),
                                         WidgetSpan(
                                           child: FadeTransition(
                                             opacity: Tween(begin: 0.4, end: 1.0).animate(_blinkController),
-                                            child: const Text('45 seconds ago',
-                                                style: TextStyle(color: AppColors.textBody, fontWeight: FontWeight.w700, fontSize: 12)),
+                                            child: Text('45 seconds ago',
+                                                style: TextStyle(color: context.colors.textSecondary, fontWeight: FontWeight.w700, fontSize: 12)),
                                           ),
                                         ),
                                       ],
@@ -81,17 +80,17 @@ class _TrackingSmsScreenState extends State<TrackingSmsScreen> with SingleTicker
                               width: double.infinity,
                               padding: const EdgeInsets.all(16),
                               decoration: BoxDecoration(
-                                color: Colors.white,
+                                color: context.colors.surface,
                                 borderRadius: BorderRadius.circular(16),
                                 boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 16, offset: const Offset(0, 6))],
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: const [
+                                children: [
                                   Text('Route 213F (Kimironko → Nyabugogo)',
-                                      style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.textDark, fontSize: 13.5)),
-                                  SizedBox(height: 8),
-                                  Text(
+                                      style: TextStyle(fontWeight: FontWeight.w800, color: context.colors.textPrimary, fontSize: 13.5)),
+                                  const SizedBox(height: 8),
+                                  const Text(
                                     'Estimated Arrival: 6 Mins Out from Remera Stop\nCurrent Bus Capacity Load: 31/50 Seats Occupied',
                                     style: TextStyle(color: AppColors.primary, fontWeight: FontWeight.w600, fontSize: 13, height: 1.5),
                                   ),
@@ -106,7 +105,7 @@ class _TrackingSmsScreenState extends State<TrackingSmsScreen> with SingleTicker
                             delay: const Duration(milliseconds: 140),
                             child: Container(
                               width: double.infinity,
-                              decoration: BoxDecoration(color: AppColors.cardGrey, borderRadius: BorderRadius.circular(20)),
+                              decoration: BoxDecoration(color: context.colors.surface, borderRadius: BorderRadius.circular(20)),
                               child: const Stack(children: [PulsingMapDot()]),
                             ),
                           ),

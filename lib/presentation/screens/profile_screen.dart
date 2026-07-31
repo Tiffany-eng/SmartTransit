@@ -37,7 +37,6 @@ class ProfileScreen extends StatelessWidget {
         displayName.isNotEmpty ? displayName[0].toUpperCase() : '?';
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [
@@ -72,18 +71,18 @@ class ProfileScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
                           Text(displayName,
-                              style: const TextStyle(
+                              style: TextStyle(
                                   fontWeight: FontWeight.w800,
                                   fontSize: 16,
-                                  color: AppColors.textDark)),
+                                  color: context.colors.textPrimary)),
                           const SizedBox(height: 2),
                           Text(email,
-                              style: const TextStyle(
-                                  color: AppColors.textGrey, fontSize: 13)),
-                          const SizedBox(height: 2),
-                          const Text('Member Since: January 2026',
                               style: TextStyle(
-                                  color: AppColors.textGrey, fontSize: 11)),
+                                  color: context.colors.textMuted, fontSize: 13)),
+                          const SizedBox(height: 2),
+                          Text('Member Since: January 2026',
+                              style: TextStyle(
+                                  color: context.colors.textMuted, fontSize: 11)),
                         ],
                       ),
                     ),
@@ -96,19 +95,19 @@ class ProfileScreen extends StatelessWidget {
                         width: double.infinity,
                         padding: const EdgeInsets.all(18),
                         decoration: BoxDecoration(
-                            color: AppColors.chipBg,
+                            color: context.colors.chip,
                             borderRadius: BorderRadius.circular(18)),
                         child: Column(
                           children: [
-                            const Text('Transit Summary',
+                            Text('Transit Summary',
                                 style: TextStyle(
                                     fontWeight: FontWeight.w800,
-                                    color: AppColors.textDark,
+                                    color: context.colors.textPrimary,
                                     fontSize: 14)),
                             const SizedBox(height: 14),
-                            Row(
+                            const Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: const [
+                              children: [
                                 _SummaryStat(
                                     label: 'Trips Completed', value: '48'),
                                 _SummaryStat(
@@ -129,11 +128,11 @@ class ProfileScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const FadeInUp(
-                          delay: Duration(milliseconds: 120),
+                        FadeInUp(
+                          delay: const Duration(milliseconds: 120),
                           child: Text('Account',
                               style: TextStyle(
-                                  color: AppColors.textGrey,
+                                  color: context.colors.textMuted,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 0.4)),
@@ -150,11 +149,11 @@ class ProfileScreen extends StatelessWidget {
                           );
                         }),
                         const SizedBox(height: 14),
-                        const FadeInUp(
-                          delay: Duration(milliseconds: 320),
+                        FadeInUp(
+                          delay: const Duration(milliseconds: 320),
                           child: Text('Preferences',
                               style: TextStyle(
-                                  color: AppColors.textGrey,
+                                  color: context.colors.textMuted,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w700,
                                   letterSpacing: 0.4)),
@@ -187,9 +186,9 @@ class ProfileScreen extends StatelessWidget {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16, vertical: 15),
                                 decoration: BoxDecoration(
-                                  color: Colors.white,
+                                  color: context.colors.surface,
                                   borderRadius: BorderRadius.circular(14),
-                                  border: Border.all(color: AppColors.divider),
+                                  border: Border.all(color: context.colors.divider),
                                 ),
                                 child: SettingsToggleRow(
                                   label: 'Dark Mode',
@@ -251,7 +250,7 @@ class _SummaryStat extends StatelessWidget {
     return Column(
       children: [
         Text(label,
-            style: const TextStyle(color: AppColors.textGrey, fontSize: 11)),
+            style: TextStyle(color: context.colors.textMuted, fontSize: 11)),
         const SizedBox(height: 6),
         Text(value,
             style: const TextStyle(
@@ -276,20 +275,20 @@ class _ProfileRow extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: context.colors.surface,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.divider),
+          border: Border.all(color: context.colors.divider),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(label,
-                style: const TextStyle(
+                style: TextStyle(
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textDark,
+                    color: context.colors.textPrimary,
                     fontSize: 13.5)),
-            const Icon(Icons.chevron_right,
-                size: 18, color: AppColors.textGrey),
+            Icon(Icons.chevron_right,
+                size: 18, color: context.colors.textMuted),
           ],
         ),
       ),

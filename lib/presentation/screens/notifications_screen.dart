@@ -25,7 +25,6 @@ class NotificationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [
@@ -39,9 +38,9 @@ class NotificationsScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const FadeInUp(
+                        FadeInUp(
                           child: Text('Notifications',
-                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: AppColors.textDark)),
+                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800, color: context.colors.textPrimary)),
                         ),
                         const SizedBox(height: 18),
                         FadeInUp(
@@ -50,9 +49,9 @@ class NotificationsScreen extends StatelessWidget {
                             width: double.infinity,
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 15),
                             decoration: BoxDecoration(
-                              color: Colors.white,
+                              color: context.colors.surface,
                               borderRadius: BorderRadius.circular(14),
-                              border: Border.all(color: AppColors.divider),
+                              border: Border.all(color: context.colors.divider),
                             ),
                             child: BlocBuilder<SettingsCubit, SettingsState>(
                               builder: (context, state) {
@@ -78,12 +77,12 @@ class NotificationsScreen extends StatelessWidget {
                                   width: double.infinity,
                                   padding: const EdgeInsets.all(20),
                                   decoration: BoxDecoration(
-                                    color: AppColors.cardGrey,
+                                    color: context.colors.surface,
                                     borderRadius: BorderRadius.circular(16),
                                   ),
-                                  child: const Text(
+                                  child: Text(
                                     'No notifications yet. Bus delays and route updates for your saved trips will show up here.',
-                                    style: TextStyle(color: AppColors.textGrey, fontSize: 13, height: 1.4),
+                                    style: TextStyle(color: context.colors.textMuted, fontSize: 13, height: 1.4),
                                   ),
                                 ),
                               );
@@ -99,9 +98,9 @@ class NotificationsScreen extends StatelessWidget {
                                       width: double.infinity,
                                       padding: const EdgeInsets.all(16),
                                       decoration: BoxDecoration(
-                                        color: Colors.white,
+                                        color: context.colors.surface,
                                         borderRadius: BorderRadius.circular(16),
-                                        border: Border.all(color: AppColors.divider),
+                                        border: Border.all(color: context.colors.divider),
                                         boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.04), blurRadius: 10, offset: const Offset(0, 3))],
                                       ),
                                       child: Column(
@@ -113,16 +112,16 @@ class NotificationsScreen extends StatelessWidget {
                                             children: [
                                               Expanded(
                                                 child: Text(data['title'] as String? ?? '',
-                                                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: AppColors.textDark)),
+                                                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14, color: context.colors.textPrimary)),
                                               ),
                                               const SizedBox(width: 8),
                                               Text(_relativeTime(data['createdAt'] as Timestamp?),
-                                                  style: const TextStyle(color: AppColors.textGrey, fontSize: 11)),
+                                                  style: TextStyle(color: context.colors.textMuted, fontSize: 11)),
                                             ],
                                           ),
                                           const SizedBox(height: 6),
                                           Text(data['body'] as String? ?? '',
-                                              style: const TextStyle(color: AppColors.textGrey, fontSize: 13, height: 1.4)),
+                                              style: TextStyle(color: context.colors.textMuted, fontSize: 13, height: 1.4)),
                                         ],
                                       ),
                                     ),

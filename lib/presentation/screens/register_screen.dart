@@ -56,7 +56,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       builder: (context, state) {
         final isLoading = state is AuthLoading;
         return Scaffold(
-          backgroundColor: Colors.white,
           body: SafeArea(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 28),
@@ -66,15 +65,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     const SizedBox(height: 56),
-                    const FadeInUp(
-                      delay: Duration(milliseconds: 40),
+                    FadeInUp(
+                      delay: const Duration(milliseconds: 40),
                       child: Text(
                         'Create  account',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontSize: 26,
                             fontWeight: FontWeight.w800,
-                            color: AppColors.textDark),
+                            color: context.colors.textPrimary),
                       ),
                     ),
                     const SizedBox(height: 40),
@@ -150,12 +149,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       delay: const Duration(milliseconds: 280),
                       child: GestureDetector(
                         onTap: () => Navigator.of(context).pop(),
-                        child: const Text.rich(
+                        child: Text.rich(
                           TextSpan(
                             text: 'Already have an account? ',
                             style:
-                                TextStyle(color: AppColors.textBody, fontSize: 14),
-                            children: [
+                                TextStyle(color: context.colors.textSecondary, fontSize: 14),
+                            children: const [
                               TextSpan(
                                 text: 'Login',
                                 style: TextStyle(

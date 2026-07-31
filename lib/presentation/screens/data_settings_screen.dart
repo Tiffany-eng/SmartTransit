@@ -14,7 +14,6 @@ class DataSettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Stack(
           children: [
@@ -28,10 +27,10 @@ class DataSettingsScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const FadeInUp(
+                        FadeInUp(
                           child: Text(
                             'Data & Sync Preferences',
-                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: AppColors.textDark),
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800, color: context.colors.textPrimary),
                           ),
                         ),
                         const SizedBox(height: 32),
@@ -52,12 +51,12 @@ class DataSettingsScreen extends StatelessWidget {
                         const SizedBox(height: 16),
                         FadeInUp(
                           delay: const Duration(milliseconds: 110),
-                          child: const Text(
+                          child: Text(
                             'When active, Smart Transit automatically switches to a background '
                             'SMS cellular network protocol to pull live bus tracking routes and '
                             'estimated time metrics if mobile data drops. This process operates '
                             'at zero internet data cost.',
-                            style: TextStyle(color: AppColors.textGrey, fontSize: 13.5, height: 1.5),
+                            style: TextStyle(color: context.colors.textMuted, fontSize: 13.5, height: 1.5),
                           ),
                         ),
                       ],

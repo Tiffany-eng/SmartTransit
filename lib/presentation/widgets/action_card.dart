@@ -32,9 +32,9 @@ class _ActionCardState extends State<ActionCard> {
           padding: const EdgeInsets.symmetric(vertical: 22),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: widget.muted ? AppColors.cardGrey : Colors.white,
+            color: context.colors.surface,
             borderRadius: BorderRadius.circular(18),
-            border: widget.muted ? null : Border.all(color: AppColors.divider),
+            border: widget.muted ? null : Border.all(color: context.colors.divider),
             boxShadow: widget.muted
                 ? null
                 : [
@@ -50,7 +50,7 @@ class _ActionCardState extends State<ActionCard> {
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w700,
-              color: widget.muted ? AppColors.textGrey : AppColors.textDark,
+              color: widget.muted ? context.colors.textMuted : context.colors.textPrimary,
             ),
           ),
         ),
