@@ -25,7 +25,6 @@ flutter run
 ```
 
 Requires the Flutter SDK (stable channel) and a connected device or simulator.
-<<<<<<< HEAD
 
 ## Maps and current location
 
@@ -100,5 +99,4 @@ lib/
 - Real navigation is wired the way the product would actually flow: Home →
   Find Route → Live Tracking → Bus Details, Profile → Data & Offline SMS
   Settings, Route Error → Offline SMS Mode, etc.
-- Data shown (bus numbers, ETAs, notifications) is static/sample data — swap
-  in your backend/API calls where indicated in each screen file.
+- live data(bus location, ETAs, notifications) is now pulled from Firstore/Realtime Database via TransitRepository.

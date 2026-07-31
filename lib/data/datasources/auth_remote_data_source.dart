@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthRemoteDataSource {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
@@ -13,10 +15,12 @@ class AuthRemoteDataSource {
     required String email,
     required String password,
   }) async {
-    return await _auth.createUserWithEmailAndPassword(
+    final credential = await _auth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
+    await _createUserDocument(credential.user);
+    return credential;
   }
 
   Future<UserCredential> signInWithEmail({
@@ -42,7 +46,26 @@ class AuthRemoteDataSource {
       idToken: googleAuth.idToken,
     );
 
-    return await _auth.signInWithCredential(credential);
+    final userCredential = await _auth.signInWithCredential(credential);
+    await _createUserDocument(userCredential.user);
+    return userCredential;
+  }
+
+  /// Creates a Firestore user doc if one doesn't already exist yet.
+  /// Safe to call on every sign-in — it won't overwrite existing data.
+  Future<void> _createUserDocument(User? user) async {
+    if (user == null) return;
+
+    final docRef = _firestore.collection('users').doc(user.uid);
+    final doc = await docRef.get();
+
+    if (!doc.exists) {
+      await docRef.set({
+        'uid': user.uid,
+        'email': user.email,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    }
   }
 
   Future<void> signOut() async {
